@@ -1,9 +1,7 @@
 ({
     baseUrl: '.',
     include: ['lib/almond', 'docson'],
-    // paths: {
-    //     jquery: 'lib/jquery',
-    // }
+    preserveLicenseComments: false,
     out: 'docson-built.js',
     shim: {
         'lib/jquery': {
