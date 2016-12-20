@@ -1,0 +1,27 @@
+{
+  "name": "docson",
+  "version": "1.0.0",
+  "description": "Documentation for your JSON types",
+  "main": "docson.js",
+  "directories": {
+    "example": "examples",
+    "test": "tests"
+  },
+  "dependencies": {
+    "requirejs": "2.3.2"
+  },
+  "devDependencies": {
+    "babel-cli": "6.18.0",
+    "babel-preset-es2015": "6.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reorx/docson.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reorx/docson/issues"
+  },
+  "homepage": "https://github.com/reorx/docson#readme"
+}
