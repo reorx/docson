@@ -18,7 +18,19 @@ var docson = docson || {};
 
 docson.templateBaseUrl="templates";
 
-define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib/marked", "lib/traverse"], function(jquery, handlebars, highlight, jsonpointer, marked) {
+define([
+    "lib/jquery",
+    "lib/handlebars",
+    "lib/highlight",
+    "lib/jsonpointer",
+    "lib/marked",
+    "lib/traverse",
+    "templates/box",
+    "templates/signature",
+    ], function($, Handlebars, highlight, jsonpointer, marked, _traverse, _boxTmpl, _signatureTmpl) {
+    // console.log('this is docson');
+    // console.log('dependencies', jquery, handlebars, highlight);
+    // console.log('dependencies', _boxTmpl, _signatureTmpl);
 
     var ready = $.Deferred();
     var boxTemplate;
@@ -310,6 +322,10 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     });
 
     function init() {
+        boxTemplate = Handlebars.compile(_boxTmpl);
+        signatureTemplate = Handlebars.compile(_signatureTmpl);
+        ready.resolve();
+        /*
         $.when( $.get(docson.templateBaseUrl+"/box.html").done(function(content) {
             source = content
             boxTemplate = Handlebars.compile(source);
@@ -319,11 +335,13 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
         })).always(function() {
             ready.resolve();
         });
+        */
     };
 
-    docson.doc = function(element, schema, ref, baseUrl) {
+
+    docson.doc = function(element, schema, ref) {
+        element = $(element);
         var d = $.Deferred();
-        if(baseUrl === undefined) baseUrl='';
         init();
         ready.done(function() {
             if(typeof element == "string") {
@@ -336,8 +354,35 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             var refsPromise = $.Deferred().resolve().promise();
             var refs = {};
 
+            traverse(schema).forEach(function(item) {
+                // Fix Swagger weird generation for array.
+                if(item && item.$ref == "array") {
+                    delete item.$ref;
+                    item.type ="array";
+                }
 
-            var renderBox = function() {
+                // Fetch external schema
+                if(this.key === "$ref") {
+                    if((/^https?:\/\//).test(item)) {
+                        var segments = item.split("#");
+                        var p = $.get(segments[0]).then(function(content) {
+                            if(typeof content != "object") {
+                                try {
+                                    content = JSON.parse(content);
+                                } catch(e) {
+                                    console.error("Unable to parse "+segments[0], e);
+                                }
+                            }
+                            if(content) {
+                                refs[item] = content;
+                            }
+                        });
+                        refsPromise = p.then(refsPromise)
+                    }
+                }
+            });
+
+            refsPromise.done(function() {
                 stack.push(refs);
                 var target = schema;
                 if(ref) {
@@ -345,6 +390,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     target = jsonpointer.get(schema, ref);
                     stack.push( schema );
                 }
+
                 target.root = true;
                 target.__ref = "<root>";
                 var html = boxTemplate(target);
@@ -431,82 +477,10 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     $(this).parent().children(".source").toggle();
                     resized();
                 });
-            };
-
-            var resolveRefsReentrant = function(schema){
-                traverse(schema).forEach(function(item) {
-                    // Fix Swagger weird generation for array.
-                    if(item && item.$ref == "array") {
-                        delete item.$ref;
-                        item.type ="array";
-                    }
-
-                    // Fetch external schema
-                    if(this.key === "$ref") {
-                        var external = false;
-                        //Local meaning local to this server, but not in this file.
-                        var local = false;
-                        if((/^https?:\/\//).test(item)) {
-                            external = true;
-                        }
-                        else if((/^[^#]/).test(item)) {
-                            local = true;
-                        } else if(item.indexOf('#') > 0) {
-                            //Internal reference
-                            //Turning relative refs to absolute ones
-                            external = true;
-                            item = baseUrl + item;
-                            this.update(item);
-                        }
-                        if(external){
-                            //External reference, fetch it.
-                            var segments = item.split("#");
-                            refs[item] = null;
-                            var p = $.get(segments[0]).then(function(content) {
-                                if(typeof content != "object") {
-                                    try {
-                                        content = JSON.parse(content);
-                                    } catch(e) {
-                                        console.error("Unable to parse "+segments[0], e);
-                                    }
-                                }
-                                if(content) {
-                                    refs[item] = content;
-                                    renderBox();
-                                    resolveRefsReentrant(content); 
-                                }
-                            });
-                        }
-                        else if(local) {
-                            //Local to this server, fetch relative
-                            var segments = item.split("#");
-                            refs[item] = null;
-                            var p = $.get(baseUrl + segments[0]).then(function(content) {
-                                if(typeof content != "object") {
-                                    try {
-                                        content = JSON.parse(content);
-                                    } catch(e) {
-                                        console.error("Unable to parse "+segments[0], e);
-                                    }
-                                }
-                                if(content) {
-                                    refs[item] = content;
-                                    renderBox();
-                                    resolveRefsReentrant(content);
-                                }
-                            });
-                        }
-                    }
-                });
-            };
-            
-            resolveRefsReentrant(schema);
-            renderBox();
-            
+            });
             d.resolve();
         })
         return d.promise();
     }
-
     return docson;
 });
