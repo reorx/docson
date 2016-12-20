@@ -120,7 +120,8 @@
     require(['docson'], function(docson) {
       console.log('demo:', docson);
       var e = document.getElementsByClassName('schema')[0];
-      docson.doc(e, schema);
+      // docson.doc(e, schema);
+      docson.doc(e, JSON.stringify(schema));
     })
   </script>
 </body>
