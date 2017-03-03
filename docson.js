@@ -73,8 +73,8 @@ define([
         }
         if (schema.example !== undefined) {
           text = text + '<p class="example">' +
-            '<span class="name">example</span>: ' +
-            '<span class="value">' + schema.example + '</span>' +
+            '<span class="name">Example</span>: ' +
+            '<span class="value"><code>' + schema.example + '</code></span>' +
             '</p>';
         }
         return new Handlebars.SafeString(text);
