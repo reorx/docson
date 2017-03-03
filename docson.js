@@ -163,7 +163,7 @@ define([
             schema.__type="any";
         }
         if(schema.format) {
-            schema.__type=schema.format;
+            schema.__type = schema.__type + ' (format: ' + schema.format + ')';
         }
         if( (schema.__type == "any" || schema.__type == "object") && schema.title) {
             schema.__type = schema.title;

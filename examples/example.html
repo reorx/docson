@@ -15,8 +15,9 @@
                 "description": "Represents the _document_ sent to the customer for payment.",
                 "properties": {
                     "customer": {
-                        "description": "---\nWho will pay?\nNot me!",
+                        "description": "customer email address",
                         "type": "string",
+                        "format": "email",
                         "example": "Foo Bar",
                         "maxLength": 25
                     },
