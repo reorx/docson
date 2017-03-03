@@ -63,15 +63,21 @@ define([
 
     Handlebars.registerHelper('desc', function(schema) {
         var description = schema.description;
+        console.log('schema', schema);
 
         if( !description ) return "";
         var text = description;
         if(marked) {
             marked.setOptions({gfm: true, breaks: true})
-            return new Handlebars.SafeString(marked(text));
-        } else {
-            return text;
+            text = marked(text);
         }
+        if (schema.example !== undefined) {
+          text = text + '<p class="example">' +
+            '<span class="name">example</span>: ' +
+            '<span class="value">' + schema.example + '</span>' +
+            '</p>';
+        }
+        return new Handlebars.SafeString(text);
     });
 
     Handlebars.registerHelper('equals', function(lvalue, rvalue, options) {

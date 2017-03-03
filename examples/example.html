@@ -4,13 +4,11 @@
     <title>Docson Example</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../css/docson.css">
-    <script src="../lib/require.js"></script></head>
+    <script src="../docson-built.js"></script></head>
 <body>
 <div id="doc"></div>
 <script charset="utf-8">
-    require.config({ baseUrl: ".."});
-    require(["docson", "lib/jquery"], function(docson) {
-        $(function() {
+    require(["docson"], function(docson) {
             var schema =
             {
                 "id": "Invoice",
@@ -19,6 +17,7 @@
                     "customer": {
                         "description": "---\nWho will pay?\nNot me!",
                         "type": "string",
+                        "example": "Foo Bar",
                         "maxLength": 25
                     },
                     "tags": {
@@ -117,8 +116,7 @@
                 }
             }
             docson.templateBaseUrl="../templates";
-            docson.doc("doc", schema);
-        });
+            docson.doc(document.getElementById('doc'), JSON.stringify(schema));
     });
 </script>
 </body>
