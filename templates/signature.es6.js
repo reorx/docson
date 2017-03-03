@@ -17,7 +17,6 @@ define(function() {
 {{#if keyword}}
     <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "" false false ".."}}</span>
     {{#each schemas}}
-        <span class="type-keyword">{{enum this}}</span>
         {{#simple this}}
             <span class="signature-type-{{__type}}">
                 {{__type}}
@@ -26,6 +25,7 @@ define(function() {
                 {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
         {{/simple}}
+        <span class="type-keyword">{{enum this}}</span>
         {{#complex this}}
             {{#box this}}
                 <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-{{__type}} signature-button signature-type-expandable button">{{__type}}</span>
@@ -52,7 +52,6 @@ define(function() {
 {{/if}}
 {{#unless keyword}}
     {{#each schemas}}
-        <span class="type-keyword">{{enum this}}</span>
         {{#primitive this}}
            <span class="signature-type-{{__type}}">
                {{__type}}
@@ -61,6 +60,7 @@ define(function() {
                {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
         {{/primitive}}
+        <span class="type-keyword">{{enum this}}</span>
         {{#ref this}}
             {{#box this}}
                 <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-ref signature-button signature-type-expandable button">{{__name}}</span>

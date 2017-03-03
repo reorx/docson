@@ -7,3 +7,7 @@ templates: templates/box.js templates/signature.js
 
 build: templates
 	./node_modules/.bin/r.js -o build.js
+
+clean:
+	rm templates/box.js templates/signature.js
+
