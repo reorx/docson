@@ -327,6 +327,13 @@ define([
         console.log(context);
     });
 
+    Handlebars.registerHelper('ifMinMax', function(schema, options) {
+      if (schema.minLength !== undefined || schema.maxLength !== undefined || schema.minimum !== undefined || schema.maximum !== undefined) {
+        return options.fn(this);
+      }
+      return options.inverse(this);
+    });
+
     function init() {
         boxTemplate = Handlebars.compile(_boxTmpl);
         signatureTemplate = Handlebars.compile(_signatureTmpl);

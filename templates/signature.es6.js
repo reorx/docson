@@ -15,17 +15,18 @@ define(function() {
  limitations under the License.
 }}
 {{#if keyword}}
-    <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "" false false ".."}}</span>
     {{#each schemas}}
         {{#simple this}}
             <span class="signature-type-{{__type}}">
                 {{__type}}
             </span>
+            {{#ifMinMax this}}
             <span class="type-keyword">
                 {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
+            {{/ifMinMax}}
         {{/simple}}
-        <span class="type-keyword">{{enum this}}</span>
+        {{# if this.enum }}<span class="type-keyword">{{enum this}}</span>{{/if}}
         {{#complex this}}
             {{#box this}}
                 <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-{{__type}} signature-button signature-type-expandable button">{{__type}}</span>
@@ -49,6 +50,7 @@ define(function() {
             <span class="type-default">{{__default}}</span>
         {{/exists}}
     {{/each}}
+    <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "" false false ".."}}</span>
 {{/if}}
 {{#unless keyword}}
     {{#each schemas}}
@@ -56,11 +58,13 @@ define(function() {
            <span class="signature-type-{{__type}}">
                {{__type}}
             </span>
+            {{#ifMinMax this}}
             <span class="type-keyword">
-               {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
+                {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
+            {{/ifMinMax}}
         {{/primitive}}
-        <span class="type-keyword">{{enum this}}</span>
+        {{# if this.enum }}<span class="type-keyword">{{enum this}}</span>{{/if}}
         {{#ref this}}
             {{#box this}}
                 <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-ref signature-button signature-type-expandable button">{{__name}}</span>
