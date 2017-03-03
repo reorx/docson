@@ -15,8 +15,11 @@
  */
 
 .docson {
-    font-family: 'Droid Sans',verdana,helvetica;
+/*    font-family: 'Droid Sans',verdana,helvetica;
     font-size: 13px;
+*/
+    font-family: Helvetica Neue;
+    font-size: 15px;
     padding: 6px 6px 6px 6px;
 }
 
@@ -66,23 +69,21 @@
 }
 
 .docson .box-header {
-    padding: 6px;
+    padding: .8em 1em;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     border-bottom: 1px solid lightgrey;
     background: whitesmoke;
-   /* background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
+    /* background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
     background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);*/
 }
 
 .docson .box-name {
     color: darkblue;
-    padding: 5px 40px 2px 3px;
     float: left;
 }
 
 .docson .title {
-    margin-top: -3px;
     font-size: 120%;
 }
 
@@ -105,8 +106,8 @@
 }
 
 .docson .box-body {
-    padding-left: 10px;
-    padding-right: 28px;
+    padding-left: 1em;
+    padding-right: 2em;
     clear: both;
 }
 
@@ -159,29 +160,45 @@
 }
 
 .docson .signature {
-    padding-top: 5px;
-    clear: left;
+    padding-top: 1em;
+    /* clear: left; */
+    line-height: 2em;
+    /* width: 100%; */
 }
 
 .docson .signature-header {
     padding-top: 3px;
-    height: 20px;
+    /* height: 20px; */
     line-height: 24px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .docson .property-name {
-    float: left;
+    /* float: left; */
     font-family: "Lucida Console", Monaco, monospace;
-    min-width: 130px;
+    min-width: 15em;
 }
 
 .docson .required {
     font-weight: bold;
 }
+/*
+.docson .required:after {
+    content: "required";
+    margin-left: 5px;
+    color: #b31212;
+    font-size: .7em;
+    position: relative;
+    top: -5px;
+}
+*/
 
 .docson .type-keyword {
-    font-size: 80%;
+    /* font-size: 90%; */
     color: dimgray;
+    margin-left: 1em;
+    text-decoration: underline;
 }
 
 .docson .type-pattern {
@@ -190,10 +207,16 @@
 }
 
 .docson .type-enum {
-    color: purple;
+    color: #0038d6;
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 90%;
-    padding-left: 2px;
+    /* padding-left: 2px; */
+}
+.docson .type-enum:after {
+    content: ",";
+}
+.docson .type-enum:last-child:after {
+    content: "";
 }
 
 .docson .type-default {
@@ -203,9 +226,10 @@
 
 .docson .signature-type {
     padding-left: 6px;
-    float: left;
-    min-width: 160px;
-    max-width: 320px;
+    /* float: left; */
+    /* min-width: 160px; */
+    /* max-width: 320px; */
+    flex-grow: 1;
 }
 
 .docson .signature-type-any {
@@ -281,19 +305,21 @@
 .docson .signature-description {
     padding-left: 6px;
     padding-bottom: 3px;
-    color: dimgray;
-    float: left;
-    max-width: 600px;
+    color: #444;
+    /* float: left; */
+    /* max-width: 600px; */
+    width: 100%;
+    flex-grow: 1;
 }
 
 .docson .signature-box-container {
-    clear: both;
+    /* clear: both; */
 }
 
 .docson .box-container {
-    float: left;
+    /* float: left; */
     padding-top: 4px;
-    padding-left: 8px;
+    padding-left: 1em;
     display: none;
 }
 
@@ -326,13 +352,13 @@
 }
 
 .docson .desc {
-    padding-left: 6px;
-    line-height: 17px;
+    padding-left: 1em;
+    line-height: 1.5em;
 }
 
 .docson .desc p {
     margin: 0;
-    margin-top: 3px;
+    margin-top: .5em;
 }
 
 .docson .desc code {
@@ -472,5 +498,3 @@
 .docson .json-schema-map > .json-object-key {
     color: #080;
     font-style: italic;
-}
-
